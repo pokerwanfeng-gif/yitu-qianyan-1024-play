@@ -1737,7 +1737,11 @@ function startGame(tier){
       renderStage(item);
       renderEasyPanel(item);
     } else {
-      const pool = hardPool();
+      const fullPool = hardPool();
+      // A separate preview link lets organizers try only the recently revised questions.
+      const preview = new URLSearchParams(window.location.search).get('trial') === 'details';
+      const previewPool = preview ? fullPool.filter(function(it){ return HARD_REVISED_IMAGES.has(it.img); }) : [];
+      const pool = previewPool.length ? previewPool : fullPool;
       const item = pickQuestion(pool);
       state.item = item;
       state.hardList = HARD_OPTS[item.img].slice();
